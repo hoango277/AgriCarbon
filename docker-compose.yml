@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  database:
+    image: mysql:8.0
+    container_name: agricarbon_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: hoa0976271476
+      MYSQL_DATABASE: overrun
+      MYSQL_USER: agricarbon
+      MYSQL_PASSWORD: agricarbon123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - agricarbon_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Backend API
+  backend:
+    build:
+      context: ./BE
+      dockerfile: Dockerfile
+    container_name: agricarbon_backend
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=mysql+pymysql://root:hoa0976271476@database/overrun
+      - SECRET_KEY=your-super-secret-key-change-in-production-please
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - GEMINI_API_KEY=AIzaSyDT0bh977dN__89Z45neWY0oldJf_swStc
+      - FRONTEND_URL=http://localhost
+    ports:
+      - "8000:8000"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - agricarbon_network
+    volumes:
+      - ./BE:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend
+  frontend:
+    build:
+      context: ./FE
+      dockerfile: Dockerfile
+    container_name: agricarbon_frontend
+    restart: unless-stopped
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000/api
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - agricarbon_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy (Optional - for production)
+  nginx:
+    image: nginx:alpine
+    container_name: agricarbon_proxy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - agricarbon_network
+    profiles:
+      - production
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  agricarbon_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16 
