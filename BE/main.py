@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from configs.database import engine, Base
+from configs.settings import settings
 from routers import auth
 
 # Create tables
