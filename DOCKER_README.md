@@ -167,6 +167,20 @@ docker-compose build --no-cache
 docker system prune -a
 ```
 
+### Upload Issues (413 Request Entity Too Large)
+```bash
+# If getting 413 errors for image uploads, check nginx logs
+docker logs agricarbon_frontend
+
+# The nginx.conf is configured for 50MB uploads
+# If you need larger limits, edit FE/nginx.conf:
+# client_max_body_size 100M;
+
+# Then rebuild frontend
+docker-compose build frontend
+docker-compose up -d frontend
+```
+
 ### Database Connection Issues
 ```bash
 # Check database status
