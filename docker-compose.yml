@@ -55,7 +55,7 @@ services:
     container_name: agricarbon_frontend
     restart: unless-stopped
     environment:
-      - VITE_API_BASE_URL=http://localhost:8000/api
+      - VITE_API_BASE_URL=/api
     ports:
       - "80:80"
     depends_on:
