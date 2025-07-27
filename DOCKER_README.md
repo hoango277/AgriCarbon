@@ -11,8 +11,6 @@ Hướng dẫn setup và chạy dự án AgriCarbon bằng Docker.
 
 ## 🚀 Quick Start
 
-### Production Mode
-
 ```bash
 # Clone repository
 git clone <repository-url>
@@ -28,52 +26,30 @@ docker-compose logs -f
 docker-compose down
 ```
 
-### Development Mode
-
-```bash
-# Chạy development environment với hot reload
-docker-compose -f docker-compose.dev.yml up -d
-
-# Xem logs của service cụ thể
-docker-compose -f docker-compose.dev.yml logs -f backend
-docker-compose -f docker-compose.dev.yml logs -f frontend
-
-# Rebuild service cụ thể
-docker-compose -f docker-compose.dev.yml up -d --build backend
-```
-
 ## 🌐 Truy cập ứng dụng
 
-### Production
 - **Frontend**: http://localhost
 - **Backend API**: http://localhost:8000
 - **API Docs**: http://localhost:8000/docs
 - **Database**: localhost:3306
 
-### Development  
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:8001
-- **Database**: localhost:3307
-
 ## 📦 Services
 
 ### Database (MySQL 8.0)
 - **Container**: `agricarbon_db`
-- **Port**: 3306 (prod) / 3307 (dev)
+- **Port**: 3306
 - **Database**: overrun
 - **User**: root
 - **Password**: hoa0976271476
 
 ### Backend (FastAPI)
 - **Container**: `agricarbon_backend`
-- **Port**: 8000 (prod) / 8001 (dev)
-- **Health check**: `/`
+- **Port**: 8000
 - **API Docs**: `/docs`
 
-### Frontend (React + Vite + Nginx)
+### Frontend (React + Nginx)
 - **Container**: `agricarbon_frontend`
-- **Port**: 80 (prod) / 5173 (dev)
-- **Health check**: `/health`
+- **Port**: 80
 
 ## 🔧 Useful Commands
 
@@ -152,24 +128,18 @@ VITE_API_BASE_URL=http://localhost:8000/api
 
 ## 🛠️ Development Workflow
 
-### Backend Development
+### Local Development
 ```bash
 # Start only database
-docker-compose -f docker-compose.dev.yml up -d database
+docker-compose up -d database
 
-# Run backend locally for development
+# Run backend locally
 cd BE
 pip install -r requirements.txt
-python run.py
-```
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
-### Frontend Development
-```bash
-# Start backend services
-docker-compose -f docker-compose.dev.yml up -d database backend
-
-# Run frontend locally
-cd FE
+# Run frontend locally (in another terminal)
+cd FE  
 npm install
 npm run dev
 ```
@@ -210,14 +180,13 @@ docker-compose up -d
 
 ## 📊 Monitoring
 
-### Health Checks
+### Service Status
 ```bash
-# Check all services health
+# Check all services status
 docker-compose ps
 
-# Manual health check
+# Check backend API
 curl http://localhost:8000/
-curl http://localhost/health
 ```
 
 ### Logs
@@ -254,7 +223,6 @@ docker-compose --profile production up -d
 ## 📝 Notes
 
 - Volumes persist data between container restarts
-- Use development compose for local development with hot reload
 - Production uses optimized builds and nginx
-- Health checks ensure services are ready before dependencies start
+- Dependencies ensure services start in correct order
 - Network isolation between services for security 
