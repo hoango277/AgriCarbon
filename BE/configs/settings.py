@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY")
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
     
+    # Database auto-update settings
+    DB_AUTO_UPDATE: bool = os.getenv("DB_AUTO_UPDATE", "true").lower() == "true"
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    
     class Config:
         env_file = ".env"
 

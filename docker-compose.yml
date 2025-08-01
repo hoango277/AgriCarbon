@@ -37,6 +37,8 @@ services:
       - ACCESS_TOKEN_EXPIRE_MINUTES=30
       - GEMINI_API_KEY=AIzaSyDT0bh977dN__89Z45neWY0oldJf_swStc
       - FRONTEND_URL=http://localhost
+      - DB_AUTO_UPDATE=true
+      - ENVIRONMENT=development
     ports:
       - "8000:8000"
     depends_on:

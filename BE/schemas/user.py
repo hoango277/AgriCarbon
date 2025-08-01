@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import date, datetime
 from typing import Optional
+from models.user import UserRole
 
 class CCCDInfo(BaseModel):
     # Mặt trước
@@ -25,6 +26,7 @@ class UserRegister(BaseModel):
     issue_date: date
     issue_place: str
     phone_number: str
+    role: Optional[UserRole] = UserRole.FARMER
 
 class UserCreate(BaseModel):
     full_name: str
@@ -49,6 +51,7 @@ class UserResponse(BaseModel):
     issue_date: date
     issue_place: str
     phone_number: str
+    role: UserRole
     created_at: datetime
     updated_at: Optional[datetime]
     

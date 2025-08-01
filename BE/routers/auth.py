@@ -49,7 +49,8 @@ async def register(
         issue_date=user_data.issue_date,
         issue_place=user_data.issue_place,
         phone_number=user_data.phone_number,
-        password_hash=password_hash
+        password_hash=password_hash,
+        role=user_data.role
     )
     
     db.add(db_user)
