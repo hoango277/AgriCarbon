@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { userAPI } from '../services/api';
 import Layout from '../components/Layout';
 
 const Home = () => {
+    const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -17,6 +18,12 @@ const Home = () => {
             try {
                 const userInfo = await userAPI.getProfile();
                 setUser(userInfo);
+                
+                // Redirect admin to admin dashboard
+                if (userInfo.role === 'admin') {
+                    navigate('/admin');
+                    return;
+                }
             } catch (error) {
                 localStorage.removeItem('token');
             }

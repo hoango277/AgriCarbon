@@ -5,6 +5,9 @@ import Register from './pages/Register'
 import RegisterConfirm from './pages/RegisterConfirm'
 import Profile from './pages/Profile'
 import ChangePassword from './pages/ChangePassword'
+import CropDeclaration from './pages/CropDeclaration'
+import History from './pages/History'
+import AdminDashboard from './pages/AdminDashboard'
 
 function Router() {
   return (
@@ -15,6 +18,9 @@ function Router() {
       <Route path="/register/confirm" element={<RegisterConfirm />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/change-password" element={<ChangePassword />} />
+      <Route path="/crop-declaration" element={<CropDeclaration />} />
+      <Route path="/history" element={<History />} />
+      <Route path="/admin" element={<AdminDashboard />} />
     </Routes>
   )
 }
