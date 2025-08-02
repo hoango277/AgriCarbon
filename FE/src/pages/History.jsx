@@ -71,6 +71,11 @@ const History = () => {
         navigate(`/crop-declaration?edit=${declaration.id}`);
     };
 
+    const handleCommit = (declaration) => {
+        // Navigate to crop declaration page with commit mode
+        navigate(`/crop-declaration?commit=${declaration.id}`);
+    };
+
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setShowDeleteModal(true);
@@ -245,6 +250,14 @@ const History = () => {
                                                                 Sửa
                                                             </button>
                                                         )}
+                                                        {declaration.status === 'draft' && (
+                                                            <button
+                                                                onClick={() => handleCommit(declaration)}
+                                                                className="text-green-600 hover:text-green-900"
+                                                            >
+                                                                Cam kết
+                                                            </button>
+                                                        )}
                                                         {canDelete(declaration) && (
                                                             <button
                                                                 onClick={() => handleDeleteClick(declaration.id)}
@@ -294,6 +307,14 @@ const History = () => {
                                                         className="text-xs text-blue-600 hover:text-blue-900 font-medium"
                                                     >
                                                         Sửa
+                                                    </button>
+                                                )}
+                                                {declaration.status === 'draft' && (
+                                                    <button
+                                                        onClick={() => handleCommit(declaration)}
+                                                        className="text-xs text-green-600 hover:text-green-900 font-medium"
+                                                    >
+                                                        Cam kết
                                                     </button>
                                                 )}
                                                 {canDelete(declaration) && (

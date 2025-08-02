@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import SignatureCanvas from '../components/SignatureCanvas';
 import { userAPI, cropAPI } from '../services/api';
 
 const CropDeclaration = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedDeclaration, setSelectedDeclaration] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [editId, setEditId] = useState(null);
     
     // Form states
     const [declarationForm, setDeclarationForm] = useState({
@@ -29,21 +32,150 @@ const CropDeclaration = () => {
     });
 
     useEffect(() => {
-        checkAuthAndLoadData();
+        initializePage();
     }, []);
+
+    const initializePage = async () => {
+        // First check auth and load user data
+        const userData = await checkAuthAndLoadData();
+        
+        // Then check for edit or commit mode from URL params
+        const editParam = searchParams.get('edit');
+        const commitParam = searchParams.get('commit');
+        
+        if (editParam && userData) {
+            setEditMode(true);
+            setEditId(parseInt(editParam));
+            loadDeclarationForEdit(parseInt(editParam));
+        } else if (commitParam && userData) {
+            setEditId(parseInt(commitParam));
+            loadDeclarationForCommitWithUser(parseInt(commitParam), userData);
+        }
+    };
 
     const checkAuthAndLoadData = async () => {
         try {
             const userInfo = await userAPI.getProfile();
             if (userInfo.role !== 'farmer') {
                 navigate('/');
-                return;
+                return null;
             }
             setUser(userInfo);
+            setLoading(false);
+            return userInfo;
         } catch (error) {
             navigate('/login');
-        } finally {
             setLoading(false);
+            return null;
+        }
+    };
+
+    const loadDeclarationForEdit = async (declarationId) => {
+        try {
+            const declaration = await cropAPI.getDeclaration(declarationId);
+            
+            // Load data into form
+            setDeclarationForm({
+                area_name: declaration.area_name,
+                latitude: declaration.latitude,
+                longitude: declaration.longitude,
+                area_size: declaration.area_size,
+                crop_type: declaration.crop_type,
+                planting_years: declaration.planting_years,
+                evidence_image: null // File won't be loaded, user can upload new one
+            });
+            
+            setSelectedDeclaration(declaration);
+            
+            // Set appropriate step based on status
+            if (declaration.status === 'draft') {
+                setCurrentStep(1);
+            } else if (declaration.status === 'committed') {
+                setCurrentStep(2);
+                // Load commitment data if exists
+                if (declaration.commitment) {
+                    setCommitmentForm({
+                        commitment_text: declaration.commitment.commitment_text,
+                        signature_data: declaration.commitment.signature_data,
+                        signer_name: declaration.commitment.signer_name
+                    });
+                }
+            }
+        } catch (error) {
+            alert('Không thể tải dữ liệu khai báo: ' + error.response?.data?.detail);
+            navigate('/history');
+        }
+    };
+
+    const loadDeclarationForCommit = async (declarationId) => {
+        try {
+            const declaration = await cropAPI.getDeclaration(declarationId);
+            
+            if (declaration.status !== 'draft') {
+                alert('Chỉ có thể ký cam kết cho khai báo ở trạng thái nháp');
+                navigate('/history');
+                return;
+            }
+            
+            setSelectedDeclaration(declaration);
+            setCurrentStep(2); // Go directly to commitment step
+            
+            // Load declaration data for display
+            setDeclarationForm({
+                area_name: declaration.area_name,
+                latitude: declaration.latitude,
+                longitude: declaration.longitude,
+                area_size: declaration.area_size,
+                crop_type: declaration.crop_type,
+                planting_years: declaration.planting_years,
+                evidence_image: null
+            });
+            
+            // Pre-fill commitment form with user info if available
+            if (user) {
+                setCommitmentForm(prev => ({
+                    ...prev,
+                    signer_name: user.full_name || ''
+                }));
+            }
+        } catch (error) {
+            alert('Không thể tải dữ liệu khai báo: ' + error.response?.data?.detail);
+            navigate('/history');
+        }
+    };
+
+    const loadDeclarationForCommitWithUser = async (declarationId, userData) => {
+        try {
+            const declaration = await cropAPI.getDeclaration(declarationId);
+            
+            if (declaration.status !== 'draft') {
+                alert('Chỉ có thể ký cam kết cho khai báo ở trạng thái nháp');
+                navigate('/history');
+                return;
+            }
+            
+            setSelectedDeclaration(declaration);
+            setCurrentStep(2); // Go directly to commitment step
+            
+            // Load declaration data for display
+            setDeclarationForm({
+                area_name: declaration.area_name,
+                latitude: declaration.latitude,
+                longitude: declaration.longitude,
+                area_size: declaration.area_size,
+                crop_type: declaration.crop_type,
+                planting_years: declaration.planting_years,
+                evidence_image: null
+            });
+            
+            // Pre-fill commitment form with user info
+            setCommitmentForm(prev => ({
+                ...prev,
+                signer_name: userData.full_name || ''
+            }));
+        } catch (error) {
+            alert('Không thể tải dữ liệu khai báo: ' + error.response?.data?.detail);
+            navigate('/history');
         }
     };
 
@@ -84,35 +216,49 @@ const CropDeclaration = () => {
     const handleStep1Submit = async (e) => {
         e.preventDefault();
         try {
-            // Create declaration
             const declarationData = { ...declarationForm };
             delete declarationData.evidence_image;
             
-            const newDeclaration = await cropAPI.createDeclaration(declarationData);
+            let declaration;
+            if (editMode && editId) {
+                // Update existing declaration
+                declaration = await cropAPI.updateDeclaration(editId, declarationData);
+                setSelectedDeclaration(declaration);
+            } else {
+                // Create new declaration
+                declaration = await cropAPI.createDeclaration(declarationData);
+                setSelectedDeclaration(declaration);
+            }
             
             // Upload evidence if provided
             if (declarationForm.evidence_image) {
                 const formData = new FormData();
                 formData.append('file', declarationForm.evidence_image);
-                await cropAPI.uploadEvidence(newDeclaration.id, formData);
+                await cropAPI.uploadEvidence(declaration.id, formData);
             }
             
-            setSelectedDeclaration(newDeclaration);
             setCurrentStep(2);
         } catch (error) {
-            alert('Có lỗi xảy ra khi tạo khai báo: ' + error.response?.data?.detail);
+            const action = editMode ? 'cập nhật' : 'tạo';
+            alert(`Có lỗi xảy ra khi ${action} khai báo: ` + error.response?.data?.detail);
         }
     };
 
     const handleStep2Submit = async (e) => {
         e.preventDefault();
         try {
+            const declarationId = selectedDeclaration?.id || editId;
+            if (!declarationId) {
+                alert('Không tìm thấy thông tin khai báo');
+                return;
+            }
+            
             const commitmentData = {
                 ...commitmentForm,
-                crop_declaration_id: selectedDeclaration.id
+                crop_declaration_id: declarationId
             };
             
-            await cropAPI.createCommitment(selectedDeclaration.id, commitmentData);
+            await cropAPI.createCommitment(declarationId, commitmentData);
             setCurrentStep(3);
         } catch (error) {
             alert('Có lỗi xảy ra khi tạo cam kết: ' + error.response?.data?.detail);
@@ -121,25 +267,37 @@ const CropDeclaration = () => {
 
     const handleStep3Submit = async () => {
         try {
-            await cropAPI.submitDeclaration(selectedDeclaration.id);
+            const declarationId = selectedDeclaration?.id || editId;
+            if (!declarationId) {
+                alert('Không tìm thấy thông tin khai báo');
+                return;
+            }
+            
+            await cropAPI.submitDeclaration(declarationId);
             alert('Nộp khai báo thành công! Đang chờ xác nhận từ admin.');
-            // Reset form and go back to step 1
-            setCurrentStep(1);
-            setDeclarationForm({
-                area_name: '',
-                latitude: null,
-                longitude: null,
-                area_size: '',
-                crop_type: '',
-                planting_years: '',
-                evidence_image: null
-            });
-            setCommitmentForm({
-                commitment_text: '',
-                signature_data: '',
-                signer_name: ''
-            });
-            setSelectedDeclaration(null);
+            
+            // Navigate back to history if in edit/commit mode, otherwise reset form
+            if (editMode || searchParams.get('commit')) {
+                navigate('/history');
+            } else {
+                // Reset form and go back to step 1 for new declaration
+                setCurrentStep(1);
+                setDeclarationForm({
+                    area_name: '',
+                    latitude: null,
+                    longitude: null,
+                    area_size: '',
+                    crop_type: '',
+                    planting_years: '',
+                    evidence_image: null
+                });
+                setCommitmentForm({
+                    commitment_text: '',
+                    signature_data: '',
+                    signer_name: ''
+                });
+                setSelectedDeclaration(null);
+            }
         } catch (error) {
             alert('Có lỗi xảy ra khi nộp khai báo: ' + error.response?.data?.detail);
         }
@@ -158,8 +316,28 @@ const CropDeclaration = () => {
             <div className="max-w-6xl mx-auto px-4 md:px-0">
                 {/* Header */}
                 <div className="mb-6 md:mb-8">
-                    <h1 className="text-xl md:text-2xl font-bold text-gray-900">Khai báo thông tin cây trồng</h1>
-                    <p className="text-gray-600 mt-1 text-sm md:text-base">Khai báo và quản lý thông tin cây trồng của bạn</p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+                                {editMode ? 'Cập nhật khai báo' : 
+                                 searchParams.get('commit') ? 'Ký cam kết' : 
+                                 'Khai báo thông tin cây trồng'}
+                            </h1>
+                            <p className="text-gray-600 mt-1 text-sm md:text-base">
+                                {editMode ? 'Chỉnh sửa thông tin khai báo của bạn' :
+                                 searchParams.get('commit') ? 'Ký cam kết cho khai báo đã tạo' :
+                                 'Khai báo và quản lý thông tin cây trồng của bạn'}
+                            </p>
+                        </div>
+                        {(editMode || searchParams.get('commit')) && (
+                            <button
+                                onClick={() => navigate('/history')}
+                                className="text-gray-500 hover:text-gray-700 text-sm md:text-base"
+                            >
+                                ← Quay lại lịch sử
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {/* Progress Steps */}
