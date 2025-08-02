@@ -112,7 +112,7 @@ const RegisterConfirm = () => {
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                         <div className="text-center">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-                            <p className="mt-4 text-gray-600">Đang xử lý ảnh CCCD...</p>
+                            <p className="mt-4 text-gray-600">AI đang trích xuất dữ liệu từ CCCD...</p>
                         </div>
                     </div>
                 </div>

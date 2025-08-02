@@ -16,6 +16,7 @@ const History = () => {
 
     useEffect(() => {
         checkAuthAndLoadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const checkAuthAndLoadData = async () => {
@@ -29,7 +30,7 @@ const History = () => {
             
             const declarationsData = await cropAPI.getDeclarations();
             setDeclarations(declarationsData);
-        } catch (error) {
+        } catch {
             navigate('/login');
         } finally {
             setLoading(false);
@@ -74,6 +75,18 @@ const History = () => {
     const handleCommit = (declaration) => {
         // Navigate to crop declaration page with commit mode
         navigate(`/crop-declaration?commit=${declaration.id}`);
+    };
+
+    const handleSubmit = async (declarationId) => {
+        try {
+            await cropAPI.submitDeclaration(declarationId);
+            alert('Nộp khai báo thành công! Đang chờ xác nhận từ admin.');
+            // Reload to update status
+            const declarations = await cropAPI.getDeclarations();
+            setDeclarations(declarations);
+        } catch (error) {
+            alert('Có lỗi xảy ra khi nộp khai báo: ' + error.response?.data?.detail);
+        }
     };
 
     const handleDeleteClick = (id) => {
@@ -258,6 +271,14 @@ const History = () => {
                                                                 Cam kết
                                                             </button>
                                                         )}
+                                                        {declaration.status === 'committed' && (
+                                                            <button
+                                                                onClick={() => handleSubmit(declaration.id)}
+                                                                className="text-purple-600 hover:text-purple-900"
+                                                            >
+                                                                Xác nhận
+                                                            </button>
+                                                        )}
                                                         {canDelete(declaration) && (
                                                             <button
                                                                 onClick={() => handleDeleteClick(declaration.id)}
@@ -315,6 +336,14 @@ const History = () => {
                                                         className="text-xs text-green-600 hover:text-green-900 font-medium"
                                                     >
                                                         Cam kết
+                                                    </button>
+                                                )}
+                                                {declaration.status === 'committed' && (
+                                                    <button
+                                                        onClick={() => handleSubmit(declaration.id)}
+                                                        className="text-xs text-purple-600 hover:text-purple-900 font-medium"
+                                                    >
+                                                        Xác nhận
                                                     </button>
                                                 )}
                                                 {canDelete(declaration) && (

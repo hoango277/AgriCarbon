@@ -64,7 +64,8 @@ services:
     networks:
       - agricarbon_network
     volumes:
-      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - /home/ubuntu/certbot/etc:/etc/letsencrypt:ro
+      - /home/ubuntu/certbot/www:/var/www/certbot:ro
 
 
 volumes:

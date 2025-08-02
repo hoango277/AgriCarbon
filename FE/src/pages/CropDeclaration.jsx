@@ -33,6 +33,7 @@ const CropDeclaration = () => {
 
     useEffect(() => {
         initializePage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const initializePage = async () => {
@@ -63,7 +64,7 @@ const CropDeclaration = () => {
             setUser(userInfo);
             setLoading(false);
             return userInfo;
-        } catch (error) {
+        } catch {
             navigate('/login');
             setLoading(false);
             return null;
@@ -107,42 +108,7 @@ const CropDeclaration = () => {
         }
     };
 
-    const loadDeclarationForCommit = async (declarationId) => {
-        try {
-            const declaration = await cropAPI.getDeclaration(declarationId);
-            
-            if (declaration.status !== 'draft') {
-                alert('Chỉ có thể ký cam kết cho khai báo ở trạng thái nháp');
-                navigate('/history');
-                return;
-            }
-            
-            setSelectedDeclaration(declaration);
-            setCurrentStep(2); // Go directly to commitment step
-            
-            // Load declaration data for display
-            setDeclarationForm({
-                area_name: declaration.area_name,
-                latitude: declaration.latitude,
-                longitude: declaration.longitude,
-                area_size: declaration.area_size,
-                crop_type: declaration.crop_type,
-                planting_years: declaration.planting_years,
-                evidence_image: null
-            });
-            
-            // Pre-fill commitment form with user info if available
-            if (user) {
-                setCommitmentForm(prev => ({
-                    ...prev,
-                    signer_name: user.full_name || ''
-                }));
-            }
-        } catch (error) {
-            alert('Không thể tải dữ liệu khai báo: ' + error.response?.data?.detail);
-            navigate('/history');
-        }
-    };
+
 
     const loadDeclarationForCommitWithUser = async (declarationId, userData) => {
         try {
@@ -189,7 +155,7 @@ const CropDeclaration = () => {
                         longitude: position.coords.longitude
                     }));
                 },
-                (error) => {
+                () => {
                     alert('Không thể lấy vị trí GPS. Vui lòng cho phép truy cập vị trí.');
                 }
             );
