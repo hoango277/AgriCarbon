@@ -37,13 +37,33 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Xử lý lỗi chung
     if (error.response?.status === 401) {
-      // Token hết hạn, có thể redirect về login
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Chỉ redirect nếu không phải là trang login hoặc register
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/login' && currentPath !== '/register' && !currentPath.startsWith('/register')) {
+        // Token hết hạn, redirect về login
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return Promise.reject(new Error('Phiên đăng nhập đã hết hạn'));
+      }
     }
     
-    // Trả về lỗi với thông tin dễ đọc
-    const errorMessage = error.response?.data?.message || error.message || 'Có lỗi xảy ra';
+    // Trả về lỗi với thông tin dễ đọc từ backend
+    let errorMessage = 'Có lỗi xảy ra';
+    
+    if (error.response?.data?.detail) {
+      errorMessage = error.response.data.detail;
+    } else if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    } else if (error.response?.status === 401) {
+      errorMessage = 'Tài khoản hoặc mật khẩu không chính xác';
+    } else if (error.response?.status === 422) {
+      errorMessage = 'Thông tin đăng nhập không hợp lệ';
+    } else if (error.response?.status === 500) {
+      errorMessage = 'Lỗi máy chủ, vui lòng thử lại sau';
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
     return Promise.reject(new Error(errorMessage));
   }
 );

@@ -64,8 +64,12 @@ const Layout = ({ children, user }) => {
                 return 'Khai báo';
             case '/history':
                 return 'Lịch sử';
+            case '/carbon-tracking':
+                return 'Theo dõi Carbon';
             case '/admin':
                 return 'Admin Dashboard';
+            case '/admin/carbon-tracking':
+                return 'Theo dõi Carbon Nông dân';
             default:
                 return 'Dashboard';
         }
@@ -80,8 +84,17 @@ const Layout = ({ children, user }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     ),
-                    label: 'Admin Dashboard',
+                    label: 'Quản lý khai báo',
                     path: '/admin'
+                },
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    ),
+                    label: 'Theo dõi Carbon Nông dân',
+                    path: '/admin/carbon-tracking'
                 },
                 {
                     icon: (
@@ -125,6 +138,15 @@ const Layout = ({ children, user }) => {
                 {
                     icon: (
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    ),
+                    label: 'Theo dõi Carbon',
+                    path: '/carbon-tracking'
+                },
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     ),
@@ -140,7 +162,7 @@ const Layout = ({ children, user }) => {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             {/* Header - Full Width */}
-            <header className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-6">
+            <header className="bg-white shadow-lg border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-6 rounded-b-lg">
                 <div className="flex items-center space-x-4 lg:space-x-6">
                     {/* Mobile Menu Button */}
                     <button
@@ -154,10 +176,11 @@ const Layout = ({ children, user }) => {
 
                     {/* Logo */}
                     <Link to="/" className="flex items-center hover:opacity-80 transition-opacity duration-200">
-                        <div className="w-8 h-8 bg-green-600 rounded flex items-center justify-center mr-3">
-                            <span className="text-white font-bold text-sm">A</span>
-                        </div>
-                        <h1 className="text-lg lg:text-xl font-bold text-gray-800">AgriCarbon</h1>
+                        <img 
+                            src="/logo.jpg" 
+                            alt="AgriCarbon" 
+                            className="w-24 h-12 rounded-lg shadow-md mr-3 object-cover"
+                        />
                     </Link>
                     
                     {/* Divider - Hidden on mobile */}
@@ -174,7 +197,7 @@ const Layout = ({ children, user }) => {
                         className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
                     >
                         {/* Avatar */}
-                        <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-amber-600 rounded-full shadow-md flex items-center justify-center">
                             <span className="text-white text-sm font-medium">
                                 {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
                             </span>
@@ -197,7 +220,7 @@ const Layout = ({ children, user }) => {
 
                                             {/* Dropdown Menu */}
                         {dropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-[60]">
+                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-1 z-[60]">
                             <Link
                                 to="/profile"
                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -236,7 +259,7 @@ const Layout = ({ children, user }) => {
             {/* Content Area with Sidebar */}
             <div className="flex flex-1 relative">
                 {/* Desktop Sidebar */}
-                <div className={`hidden lg:flex bg-white shadow-lg transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} flex-col`}>
+                <div className={`hidden lg:flex bg-green-700 shadow-xl transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} flex-col rounded-tr-2xl`}>
                     {/* Menu Items */}
                     <nav className="flex-1 pt-6 pb-4">
                         {menuItems.map((item, index) => {
@@ -245,10 +268,10 @@ const Layout = ({ children, user }) => {
                                 <Link
                                     key={index}
                                     to={item.path}
-                                    className={`flex items-center px-4 py-3 transition-colors duration-200 ${
+                                    className={`flex items-center px-4 py-3 mx-2 rounded-xl transition-colors duration-200 ${
                                         isActive 
-                                            ? 'bg-indigo-50 text-indigo-600 border-r-2 border-indigo-600' 
-                                            : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600'
+                                            ? 'bg-white text-green-800 shadow-md font-medium' 
+                                            : 'text-green-100 hover:bg-green-600 hover:text-white hover:shadow-md'
                                     }`}
                                 >
                                     <div className="flex-shrink-0">
@@ -266,7 +289,7 @@ const Layout = ({ children, user }) => {
                     <div className="p-4">
                         <button
                             onClick={toggleSidebar}
-                            className="w-full flex items-center justify-center p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md transition-colors duration-200"
+                            className="w-full flex items-center justify-center p-2 text-green-100 hover:text-white hover:bg-green-600 rounded-xl transition-colors duration-200"
                         >
                             <svg
                                 className={`w-5 h-5 transition-transform duration-300 ${sidebarCollapsed ? 'rotate-180' : ''}`}
@@ -282,20 +305,20 @@ const Layout = ({ children, user }) => {
                 </div>
 
                 {/* Mobile Sidebar */}
-                <div className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 flex flex-col ${
+                <div className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-green-700 shadow-xl transform transition-transform duration-300 flex flex-col rounded-tr-2xl ${
                     mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}>
                     {/* Header */}
-                    <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+                    <div className="h-16 flex items-center justify-between px-4 border-b border-green-600">
                         <div className="flex items-center">
-                            <div className="w-8 h-8 bg-green-600 rounded flex items-center justify-center mr-3">
-                                <span className="text-white font-bold text-sm">A</span>
+                            <div className="w-8 h-8 bg-white rounded-lg shadow-md flex items-center justify-center mr-3">
+                                <span className="text-green-700 font-bold text-sm">A</span>
                             </div>
-                            <h1 className="text-lg font-bold text-gray-800">Menu</h1>
+                            <h1 className="text-lg font-bold text-white">Menu</h1>
                         </div>
                         <button
                             onClick={toggleMobileMenu}
-                            className="p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                            className="p-2 rounded-md text-green-100 hover:text-white hover:bg-green-600"
                         >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -312,11 +335,11 @@ const Layout = ({ children, user }) => {
                                     key={index}
                                     to={item.path}
                                     onClick={handleMobileNavClick}
-                                    className={`flex items-center px-4 py-3 transition-colors duration-200 ${
-                                        isActive 
-                                            ? 'bg-indigo-50 text-indigo-600 border-r-2 border-indigo-600' 
-                                            : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600'
-                                    }`}
+                                                                className={`flex items-center px-4 py-3 mx-2 rounded-xl transition-colors duration-200 ${
+                                isActive 
+                                    ? 'bg-white text-green-800 shadow-md font-medium' 
+                                    : 'text-green-100 hover:bg-green-600 hover:text-white hover:shadow-md'
+                            }`}
                                 >
                                     <div className="flex-shrink-0">
                                         {item.icon}
@@ -328,23 +351,23 @@ const Layout = ({ children, user }) => {
                     </nav>
 
                     {/* User Info & Logout */}
-                    <div className="border-t border-gray-200 p-4">
+                    <div className="border-t border-green-600 p-4">
                         <div className="flex items-center mb-4">
-                            <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center mr-3">
+                            <div className="w-10 h-10 bg-amber-600 rounded-full shadow-md flex items-center justify-center mr-3">
                                 <span className="text-white text-sm font-medium">
                                     {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
                                 </span>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-700">{user?.full_name || 'User'}</p>
-                                <p className="text-xs text-gray-500">{user?.phone_number}</p>
+                                <p className="text-sm font-medium text-white">{user?.full_name || 'User'}</p>
+                                <p className="text-xs text-green-200">{user?.phone_number}</p>
                             </div>
                         </div>
                         
                         <Link
                             to="/profile"
                             onClick={handleMobileNavClick}
-                            className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md mb-2"
+                            className="flex items-center w-full px-3 py-2 text-sm text-green-100 hover:bg-green-600 hover:text-white rounded-xl mb-2"
                         >
                             <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -355,7 +378,7 @@ const Layout = ({ children, user }) => {
                         <Link
                             to="/change-password"
                             onClick={handleMobileNavClick}
-                            className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md mb-2"
+                            className="flex items-center w-full px-3 py-2 text-sm text-green-100 hover:bg-green-600 hover:text-white rounded-xl mb-2"
                         >
                             <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -365,7 +388,7 @@ const Layout = ({ children, user }) => {
                         
                         <button
                             onClick={handleLogout}
-                            className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md"
+                            className="flex items-center w-full px-3 py-2 text-sm text-red-300 hover:bg-red-600 hover:text-white rounded-xl"
                         >
                             <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -389,7 +412,9 @@ const Layout = ({ children, user }) => {
                     <div className="lg:hidden mb-6">
                         <h1 className="text-xl font-bold text-gray-900">{getPageTitle()}</h1>
                     </div>
-                    {children}
+                    <div className="bg-white rounded-2xl shadow-lg p-4 lg:p-6 min-h-full">
+                        {children}
+                    </div>
                 </main>
             </div>
 

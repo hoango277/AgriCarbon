@@ -82,4 +82,32 @@ export const cropAPI = {
   deleteDeclaration: (id) => apiService.delete(`/crop/declarations/${id}`),
 };
 
+// Carbon Tracking API
+export const carbonAPI = {
+  // Lấy danh sách vùng đất đã được duyệt của farmer
+  getFarmerAreas: () => apiService.get('/carbon/areas'),
+  
+  // Lấy dữ liệu carbon summary của một vùng đất
+  getAreaCarbonSummary: (areaId) => apiService.get(`/carbon/areas/${areaId}/summary`),
+  
+  // Tạo dữ liệu carbon tracking mới
+  createCarbonTracking: (data) => apiService.post('/carbon/tracking', data),
+  
+  // Cập nhật dữ liệu carbon tracking
+  updateCarbonTracking: (id, data) => apiService.put(`/carbon/tracking/${id}`, data),
+  
+  // Xóa dữ liệu carbon tracking
+  deleteCarbonTracking: (id) => apiService.delete(`/carbon/tracking/${id}`),
+  
+  // Lấy tất cả dữ liệu carbon (admin only)
+  getAllCarbonTracking: () => apiService.get('/carbon/tracking'),
+  
+  // Admin APIs
+  // Lấy danh sách tất cả nông dân (admin only)
+  getAllFarmers: () => apiService.get('/carbon/admin/farmers'),
+  
+  // Lấy danh sách vùng đất của một farmer cụ thể (admin only)
+  getAdminFarmerAreas: (farmerId) => apiService.get(`/carbon/admin/farmers/${farmerId}/areas`),
+};
+
 export default apiService; 

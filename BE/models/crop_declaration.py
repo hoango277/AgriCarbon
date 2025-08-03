@@ -45,3 +45,4 @@ class CropDeclaration(Base):
     user = relationship("User", foreign_keys=[user_id], back_populates="crop_declarations")
     approved_by_user = relationship("User", foreign_keys=[approved_by])
     commitment = relationship("Commitment", back_populates="crop_declaration", uselist=False)
+    carbon_tracking = relationship("CarbonTracking", back_populates="crop_declaration")

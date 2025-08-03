@@ -8,6 +8,8 @@ import ChangePassword from './pages/ChangePassword'
 import CropDeclaration from './pages/CropDeclaration'
 import History from './pages/History'
 import AdminDashboard from './pages/AdminDashboard'
+import AdminCarbonTracking from './pages/AdminCarbonTracking'
+import CarbonTracking from './pages/CarbonTracking'
 
 function Router() {
   return (
@@ -20,7 +22,9 @@ function Router() {
       <Route path="/change-password" element={<ChangePassword />} />
       <Route path="/crop-declaration" element={<CropDeclaration />} />
       <Route path="/history" element={<History />} />
+      <Route path="/carbon-tracking" element={<CarbonTracking />} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/carbon-tracking" element={<AdminCarbonTracking />} />
     </Routes>
   )
 }

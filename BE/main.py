@@ -4,10 +4,10 @@ import logging
 from configs.database import engine, Base
 from configs.database_utils import init_database
 from configs.settings import settings
-from routers import auth, crop
+from routers import auth, crop, carbon
 
 # Import models để register với Base.metadata
-from models import user, crop_declaration, commitment
+from models import user, crop_declaration, commitment, carbon_tracking
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -34,6 +34,7 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(crop.router, prefix="/api/crop", tags=["Crop Management"])
+app.include_router(carbon.router, prefix="/api", tags=["Carbon Tracking"])
 
 @app.get("/")
 def root():

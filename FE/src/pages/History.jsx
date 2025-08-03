@@ -142,10 +142,10 @@ const History = () => {
                             <button
                                 key={status.value}
                                 onClick={() => setFilter(status.value)}
-                                className={`px-3 py-2 md:px-4 md:py-2 rounded-md text-xs md:text-sm font-medium transition-colors ${
+                                className={`px-4 py-3 md:px-5 md:py-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200 shadow-lg ${
                                     filter === status.value
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                                        ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-xl transform scale-105'
+                                        : 'bg-white/90 backdrop-blur-sm text-gray-700 hover:bg-gray-50 hover:shadow-xl border border-gray-200 transform hover:scale-105'
                                 }`}
                             >
                                 {status.label}
@@ -191,7 +191,7 @@ const History = () => {
                 </div>
 
                 {/* Declarations List */}
-                <div className="bg-white rounded-lg shadow border border-gray-200">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/30">
                     <div className="px-4 md:px-6 py-4 border-b border-gray-200">
                         <h3 className="text-base md:text-lg font-medium text-gray-900">
                             Danh sách khai báo ({filteredDeclarations.length})
@@ -251,14 +251,14 @@ const History = () => {
                                                     <div className="flex space-x-2">
                                                         <button
                                                             onClick={() => handleViewDetail(declaration)}
-                                                            className="text-indigo-600 hover:text-indigo-900"
+                                                            className="text-amber-600 hover:text-amber-900 px-3 py-1 rounded-lg hover:bg-amber-50"
                                                         >
                                                             Xem
                                                         </button>
                                                         {canEdit(declaration) && (
                                                             <button
                                                                 onClick={() => handleEdit(declaration)}
-                                                                className="text-blue-600 hover:text-blue-900"
+                                                                className="text-blue-600 hover:text-blue-900 px-3 py-1 rounded-lg hover:bg-blue-50"
                                                             >
                                                                 Sửa
                                                             </button>
@@ -266,7 +266,7 @@ const History = () => {
                                                         {declaration.status === 'draft' && (
                                                             <button
                                                                 onClick={() => handleCommit(declaration)}
-                                                                className="text-green-600 hover:text-green-900"
+                                                                className="text-green-600 hover:text-green-900 px-3 py-1 rounded-lg hover:bg-green-50"
                                                             >
                                                                 Cam kết
                                                             </button>
@@ -274,7 +274,7 @@ const History = () => {
                                                         {declaration.status === 'committed' && (
                                                             <button
                                                                 onClick={() => handleSubmit(declaration.id)}
-                                                                className="text-purple-600 hover:text-purple-900"
+                                                                className="text-purple-600 hover:text-purple-900 px-3 py-1 rounded-lg hover:bg-purple-50"
                                                             >
                                                                 Xác nhận
                                                             </button>
@@ -282,7 +282,7 @@ const History = () => {
                                                         {canDelete(declaration) && (
                                                             <button
                                                                 onClick={() => handleDeleteClick(declaration.id)}
-                                                                className="text-red-600 hover:text-red-900"
+                                                                className="text-red-600 hover:text-red-900 px-3 py-1 rounded-lg hover:bg-red-50"
                                                             >
                                                                 Xóa
                                                             </button>

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { userAPI } from '../services/api';
 import Layout from '../components/Layout';
 
@@ -7,12 +7,15 @@ const Home = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [videoLoaded, setVideoLoaded] = useState(false);
 
-    useEffect(() => {
-        checkAuth();
-    }, []);
+    const checkScreenSize = () => {
+        setIsMobile(window.innerWidth < 768);
+    };
 
-    const checkAuth = async () => {
+    const checkAuth = useCallback(async () => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
@@ -24,12 +27,19 @@ const Home = () => {
                     navigate('/admin');
                     return;
                 }
-            } catch (error) {
+            } catch {
                 localStorage.removeItem('token');
             }
         }
         setLoading(false);
-    };
+    }, [navigate]);
+
+    useEffect(() => {
+        checkAuth();
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, [checkAuth]);
 
     if (loading) {
         return (
@@ -42,29 +52,137 @@ const Home = () => {
     // If user is not logged in, show landing page
     if (!user) {
         return (
-            <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                        Chào mừng đến với AgriCarbon
-                    </h1>
-                    <p className="text-xl text-gray-600 mb-8">
-                        Hệ thống quản lý carbon nông nghiệp và thông tin nông dân
-                    </p>
-                    <div className="space-x-4">
-                        <Link
-                            to="/register"
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-md text-lg font-medium transition-colors duration-200"
+            <div className="relative min-h-screen overflow-hidden">
+                {/* Video Background Layer */}
+                <div className="absolute inset-0" style={{ zIndex: 1 }}>
+                    <video
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="auto"
+                        onError={(e) => {
+                            console.error('❌ Video failed to load:', e.target.error);
+                            setVideoLoaded(false);
+                        }}
+                        onLoadStart={() => console.log('⏳ Video loading started')}
+                        onCanPlay={() => {
+                            console.log('✅ Video can play now');
+                            setVideoLoaded(true);
+                        }}
+                        onLoadedData={() => console.log('✅ Video loaded successfully')}
+                        onPlay={() => console.log('▶️ Video started playing')}
+                    >
+                        <source src={isMobile ? "/phone.mp4" : "/pc.mp4"} type="video/mp4" />
+                    </video>
+                </div>
+
+                {/* Fallback Background Image (only show if video fails) */}
+                {!videoLoaded && (
+                    <div 
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                        style={{
+                            backgroundImage: `url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop")`,
+                            zIndex: 0
+                        }}
+                    ></div>
+                )}
+                
+                {/* Gradient overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-transparent to-black/40" style={{ zIndex: 2 }}></div>
+
+                {/* Navigation */}
+                <nav className="relative p-6" style={{ zIndex: 10 }}>
+                    <div className="flex justify-between items-center">
+                        {/* Menu Button */}
+                        <button 
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            className="text-white hover:bg-white hover:bg-opacity-20 p-3 rounded-md transition-all duration-200"
                         >
-                            Đăng ký ngay
-                        </Link>
+                            <div className="space-y-1">
+                                <div className="w-6 h-0.5 bg-white"></div>
+                                <div className="w-6 h-0.5 bg-white"></div>
+                                <div className="w-6 h-0.5 bg-white"></div>
+                            </div>
+                        </button>
+
+                        {/* Menu Text */}
+                        <span className="text-white font-semibold text-lg tracking-wider ml-4">MENU</span>
+
+                        {/* Login Button */}
                         <Link
                             to="/login"
-                            className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-md text-lg font-medium transition-colors duration-200"
+                            className="bg-white bg-opacity-20 hover:bg-opacity-30 text-black px-6 py-2 rounded-full border border-white border-opacity-30 transition-all duration-200 backdrop-blur-sm"
                         >
                             Đăng nhập
                         </Link>
                     </div>
+                </nav>
+
+                {/* Main Content */}
+                <div className="relative flex flex-col items-center justify-center min-h-[80vh] px-6 text-center" style={{ zIndex: 10 }}>
+                    {/* Logo */}
+                    <div className="mb-8">
+                        <h1 className="text-6xl md:text-8xl font-bold text-white tracking-[0.2em] mb-4 drop-shadow-lg">
+                            AGRICACBON
+                        </h1>
+                        <p className="text-xl md:text-2xl text-white tracking-[0.3em] font-light">
+                            AT THE HEART OF NATURE
+                        </p>
+                    </div>
+
+                    {/* Description */}
+                    <div className="max-w-4xl mx-auto mt-12">
+                        <p className="text-lg md:text-xl text-white leading-relaxed font-light px-4 drop-shadow-md">
+                            Agricacbon exists to help people prosper from conserving their forests 
+                            and wildlife, resulting in climate change mitigation for the benefit of 
+                            all. We mobilize transformative investments, through the sale of 
+                            verified carbon credits and conservation finance, to protect and restore 
+                            nature's most critical ecosystems.
+                        </p>
+                    </div>
+
+                    {/* Call to Action */}
+                    <div className="mt-12 space-x-4">
+                        <Link
+                            to="/register"
+                            className="bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-medium hover:bg-opacity-90 transition-all duration-200 shadow-lg"
+                        >
+                            Bắt đầu
+                        </Link>
+                    </div>
                 </div>
+
+                {/* Side Menu */}
+                {menuOpen && (
+                    <div className="fixed inset-0" style={{ zIndex: 50 }}>
+                        <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setMenuOpen(false)}></div>
+                        <div className="absolute left-0 top-0 h-full w-80 bg-white shadow-xl">
+                            <div className="p-6">
+                                <div className="flex justify-between items-center mb-8">
+                                    <h2 className="text-2xl font-bold text-gray-900">Menu</h2>
+                                    <button 
+                                        onClick={() => setMenuOpen(false)}
+                                        className="text-gray-500 hover:text-gray-700"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <nav className="space-y-4">
+                                    <Link to="/login" className="block py-3 px-4 text-lg text-gray-700 hover:bg-gray-100 rounded-md">
+                                        Đăng nhập
+                                    </Link>
+                                    <Link to="/register" className="block py-3 px-4 text-lg text-gray-700 hover:bg-gray-100 rounded-md">
+                                        Đăng ký
+                                    </Link>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

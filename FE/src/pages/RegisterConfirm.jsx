@@ -107,12 +107,82 @@ const RegisterConfirm = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                    <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                        <div className="text-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-                            <p className="mt-4 text-gray-600">AI đang trích xuất dữ liệu từ CCCD...</p>
+            <div 
+                className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+                style={{
+                    position: 'relative',
+                    backgroundImage: 'url("/register.jpg")',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    minHeight: '100vh'
+                }}
+            >
+                {/* Overlay */}
+                <div 
+                    style={{ 
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                        zIndex: 1
+                    }}
+                ></div>
+                
+                {/* Loading Content */}
+                <div className="relative" style={{ zIndex: 10 }}>
+                    <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                        {/* Loading Header with Logo */}
+                        <div className="text-center mb-8">
+                            <div 
+                                className="bg-white/15 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20 mx-auto inline-block"
+                                style={{ 
+                                    maxWidth: '600px',
+                                    boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.1)',
+                                    border: '1px solid rgba(255,255,255,0.2)'
+                                }}
+                            >
+                                {/* Logo */}
+                                <div className="flex justify-center mb-4">
+                                    <img 
+                                        src="/logo.jpg" 
+                                        alt="AgriCarbon" 
+                                        className="w-20 h-12 rounded-xl shadow-lg object-cover"
+                                        style={{
+                                            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+                                        }}
+                                    />
+                                </div>
+                                <h2 
+                                    className="text-2xl md:text-3xl font-extrabold text-white mb-3"
+                                    style={{
+                                        textShadow: '3px 3px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(255,255,255,0.1)',
+                                        filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.6))',
+                                        letterSpacing: '1px'
+                                    }}
+                                >
+                                    Đang xử lý
+                                </h2>
+                                <p 
+                                    className="text-sm font-semibold text-white"
+                                    style={{
+                                        textShadow: '2px 2px 6px rgba(0,0,0,0.8), 0 0 12px rgba(0,0,0,0.6)',
+                                        lineHeight: '1.6'
+                                    }}
+                                >
+                                    AI đang trích xuất thông tin từ CCCD của bạn
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div className="bg-white/95 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10">
+                            <div className="text-center">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+                                <p className="mt-4 text-gray-700 font-medium">AI đang trích xuất dữ liệu từ CCCD...</p>
+                                <p className="mt-2 text-sm text-gray-500">Vui lòng đợi trong giây lát</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -121,19 +191,77 @@ const RegisterConfirm = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mx-auto">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Xác nhận thông tin
-                    </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        Vui lòng kiểm tra thông tin từ CCCD và xác nhận để hoàn tất đăng ký
-                    </p>
-                </div>
+        <div 
+            className="min-h-screen py-12 px-4 sm:px-6 lg:px-8"
+            style={{
+                position: 'relative',
+                backgroundImage: 'url("/register.jpg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                minHeight: '100vh'
+            }}
+        >
+            {/* Overlay */}
+            <div 
+                style={{ 
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    zIndex: 1
+                }}
+            ></div>
+            
+            {/* Content */}
+            <div className="relative" style={{ zIndex: 10 }}>
+                <div className="max-w-2xl mx-auto">
+                    <div className="text-center mb-8">
+                        <div 
+                            className="bg-white/15 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20 mx-auto inline-block"
+                            style={{ 
+                                maxWidth: '700px',
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.1)',
+                                border: '1px solid rgba(255,255,255,0.2)'
+                            }}
+                        >
+                            {/* Logo */}
+                            <div className="flex justify-center mb-4">
+                                <img 
+                                    src="/logo.jpg" 
+                                    alt="AgriCarbon" 
+                                    className="w-20 h-12 rounded-xl shadow-lg object-cover"
+                                    style={{
+                                        filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+                                    }}
+                                />
+                            </div>
+                            <h2 
+                                className="text-2xl md:text-3xl font-extrabold text-white mb-3"
+                                style={{
+                                    textShadow: '3px 3px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(255,255,255,0.1)',
+                                    filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.6))',
+                                    letterSpacing: '1px'
+                                }}
+                            >
+                                Xác nhận thông tin
+                            </h2>
+                            <p 
+                                className="text-sm font-semibold text-white"
+                                style={{
+                                    textShadow: '2px 2px 6px rgba(0,0,0,0.8), 0 0 12px rgba(0,0,0,0.6)',
+                                    lineHeight: '1.6'
+                                }}
+                            >
+                                Vui lòng kiểm tra thông tin từ CCCD và xác nhận để hoàn tất đăng ký
+                            </p>
+                        </div>
+                    </div>
 
-                <div className="mt-8">
-                    <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                    <div className="mt-8">
+                        <div className="bg-white/95 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10">
                         {error && (
                             <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                                 {error}
@@ -250,7 +378,7 @@ const RegisterConfirm = () => {
                                     <button
                                         type="button"
                                         onClick={handleBack}
-                                        className="flex-1 flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        className="flex-1 flex justify-center py-2 px-4 border border-gray-300 rounded-xl shadow-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
                                     >
                                         Quay lại
                                     </button>
@@ -258,7 +386,7 @@ const RegisterConfirm = () => {
                                         type="button"
                                         onClick={handleConfirm}
                                         disabled={registering}
-                                        className="flex-1 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                                        className="flex-1 flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50"
                                     >
                                         {registering ? 'Đang đăng ký...' : 'Xác nhận đăng ký'}
                                     </button>
@@ -275,6 +403,7 @@ const RegisterConfirm = () => {
                                 </button>
                             </div>
                         )}
+                        </div>
                     </div>
                 </div>
             </div>

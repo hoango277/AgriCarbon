@@ -104,7 +104,7 @@ const ChangePassword = () => {
                 </div>
 
                 {/* Form */}
-                <div className="bg-white rounded-lg shadow border border-gray-200">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/30">
                     <div className="px-6 py-4 border-b border-gray-200">
                         <h3 className="text-lg font-medium text-gray-900">Thay đổi mật khẩu</h3>
                     </div>
@@ -135,7 +135,7 @@ const ChangePassword = () => {
                                     name="currentPassword"
                                     value={formData.currentPassword}
                                     onChange={handleChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
                                     placeholder="Nhập mật khẩu hiện tại"
                                     required
                                 />
@@ -152,7 +152,7 @@ const ChangePassword = () => {
                                     name="newPassword"
                                     value={formData.newPassword}
                                     onChange={handleChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
                                     placeholder="Nhập mật khẩu mới"
                                     required
                                 />
@@ -170,7 +170,7 @@ const ChangePassword = () => {
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
                                     placeholder="Nhập lại mật khẩu mới"
                                     required
                                 />
@@ -181,7 +181,7 @@ const ChangePassword = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                    className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-6 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-500/50 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-xl transform hover:scale-[1.02] font-semibold"
                                 >
                                     {loading ? (
                                         <div className="flex items-center justify-center">
@@ -196,7 +196,7 @@ const ChangePassword = () => {
                                 <button
                                     type="button"
                                     onClick={() => navigate('/profile')}
-                                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                                    className="px-6 py-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 shadow-lg font-semibold bg-white/80 backdrop-blur-sm hover:shadow-xl"
                                 >
                                     Hủy
                                 </button>

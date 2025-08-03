@@ -350,7 +350,7 @@ const CropDeclaration = () => {
                 </div>
 
                 {/* Step Content */}
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-4 md:p-6">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/30 p-6 md:p-8">
                     {currentStep === 1 && (
                         <div>
                             <h3 className="text-base md:text-lg font-medium text-gray-900 mb-4 md:mb-6">Thông tin khai báo cây trồng</h3>
@@ -365,7 +365,8 @@ const CropDeclaration = () => {
                                             name="area_name"
                                             value={declarationForm.area_name}
                                             onChange={handleInputChange}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
+                                            placeholder="Nhập tên khu vực"
                                             required
                                         />
                                     </div>
@@ -380,7 +381,8 @@ const CropDeclaration = () => {
                                             name="area_size"
                                             value={declarationForm.area_size}
                                             onChange={handleInputChange}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
+                                            placeholder="VD: 2.5"
                                             required
                                         />
                                     </div>
@@ -394,7 +396,8 @@ const CropDeclaration = () => {
                                             name="crop_type"
                                             value={declarationForm.crop_type}
                                             onChange={handleInputChange}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
+                                            placeholder="VD: Lúa, Ngô, Cà phê"
                                             required
                                         />
                                     </div>
@@ -408,7 +411,8 @@ const CropDeclaration = () => {
                                             name="planting_years"
                                             value={declarationForm.planting_years}
                                             onChange={handleInputChange}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
+                                            placeholder="VD: 3"
                                             required
                                         />
                                     </div>
@@ -423,7 +427,7 @@ const CropDeclaration = () => {
                                         <button
                                             type="button"
                                             onClick={getCurrentLocation}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 md:px-4 md:py-2 rounded-md text-xs md:text-sm"
+                                            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-3 md:px-5 md:py-3 rounded-xl text-sm font-semibold shadow-lg transform hover:scale-105 transition-all duration-200"
                                         >
                                             Lấy vị trí hiện tại
                                         </button>
@@ -445,7 +449,7 @@ const CropDeclaration = () => {
                                         type="file"
                                         accept="image/*"
                                         onChange={handleFileChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
                                     />
                                 </div>
                                 
@@ -453,7 +457,7 @@ const CropDeclaration = () => {
                                     <button
                                         type="submit"
                                         disabled={!declarationForm.latitude || !declarationForm.longitude}
-                                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 md:px-6 md:py-2 rounded-md text-sm md:text-base font-medium disabled:bg-gray-400"
+                                        className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 md:px-8 md:py-4 rounded-xl text-base font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed shadow-xl transform hover:scale-[1.02] transition-all duration-200"
                                     >
                                         Tiếp tục
                                     </button>
@@ -475,7 +479,7 @@ const CropDeclaration = () => {
                                         value={commitmentForm.commitment_text}
                                         onChange={(e) => setCommitmentForm(prev => ({...prev, commitment_text: e.target.value}))}
                                         rows="6"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
                                         placeholder="Tôi cam kết thông tin khai báo là chính xác và chịu trách nhiệm trước pháp luật..."
                                         required
                                     />
@@ -489,7 +493,7 @@ const CropDeclaration = () => {
                                         type="text"
                                         value={commitmentForm.signer_name}
                                         onChange={(e) => setCommitmentForm(prev => ({...prev, signer_name: e.target.value}))}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl placeholder-gray-500 focus:outline-none focus:ring-3 focus:ring-green-500/40 focus:border-green-500 focus:bg-white text-gray-900 font-medium shadow-inner transition-all duration-200"
                                         placeholder={user?.full_name}
                                         required
                                     />
@@ -513,14 +517,14 @@ const CropDeclaration = () => {
                                     <button
                                         type="button"
                                         onClick={() => setCurrentStep(1)}
-                                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 md:px-6 md:py-2 rounded-md text-sm md:text-base font-medium"
+                                        className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-4 md:px-8 md:py-4 rounded-xl text-base font-semibold shadow-xl transform hover:scale-[1.02] transition-all duration-200"
                                     >
                                         Quay lại
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={!commitmentForm.signature_data}
-                                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 md:px-6 md:py-2 rounded-md text-sm md:text-base font-medium disabled:bg-gray-400"
+                                        className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 md:px-8 md:py-4 rounded-xl text-base font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed shadow-xl transform hover:scale-[1.02] transition-all duration-200"
                                     >
                                         Ký cam kết
                                     </button>
@@ -574,13 +578,13 @@ const CropDeclaration = () => {
                                 <div className="flex flex-col md:flex-row justify-between space-y-3 md:space-y-0">
                                     <button
                                         onClick={() => setCurrentStep(2)}
-                                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 md:px-6 md:py-2 rounded-md text-sm md:text-base font-medium"
+                                        className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-4 md:px-8 md:py-4 rounded-xl text-base font-semibold shadow-xl transform hover:scale-[1.02] transition-all duration-200"
                                     >
                                         Quay lại
                                     </button>
                                     <button
                                         onClick={handleStep3Submit}
-                                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 md:px-6 md:py-2 rounded-md text-sm md:text-base font-medium"
+                                        className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 md:px-8 md:py-4 rounded-xl text-base font-semibold shadow-xl transform hover:scale-[1.02] transition-all duration-200"
                                     >
                                         NỘP
                                     </button>
