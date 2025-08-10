@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Tạo axios instance với config mặc định
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, 
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api', 
   headers: {
     'Content-Type': 'application/json',
   },
@@ -11,8 +11,11 @@ const axiosInstance = axios.create({
 // Request interceptor để thêm authorization token (nếu cần)
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Có thể thêm token vào header tại đây
-    const token = localStorage.getItem('token');
+    // Check for company token first, then farmer/admin token
+    const companyToken = localStorage.getItem('company_token');
+    const farmerToken = localStorage.getItem('token');
+    
+    const token = companyToken || farmerToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -39,10 +42,26 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       // Chỉ redirect nếu không phải là trang login hoặc register
       const currentPath = window.location.pathname;
-      if (currentPath !== '/login' && currentPath !== '/register' && !currentPath.startsWith('/register')) {
-        // Token hết hạn, redirect về login
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+      const isCompanyPath = currentPath.startsWith('/company');
+      const isLoginOrRegisterPath = currentPath === '/login' || 
+                                   currentPath === '/register' || 
+                                   currentPath.startsWith('/register') ||
+                                   currentPath === '/company-login' ||
+                                   currentPath === '/company-register';
+      
+      if (!isLoginOrRegisterPath) {
+        // Token hết hạn, redirect về login phù hợp
+        if (isCompanyPath || localStorage.getItem('company_token')) {
+          // Company path hoặc có company token -> redirect về company login
+          localStorage.removeItem('company_token');
+          localStorage.removeItem('company_data');
+          localStorage.removeItem('company_payment_completed');
+          window.location.href = '/company-login';
+        } else {
+          // Farmer path -> redirect về farmer login
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
         return Promise.reject(new Error('Phiên đăng nhập đã hết hạn'));
       }
     }

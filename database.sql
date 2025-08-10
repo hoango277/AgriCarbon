@@ -13,6 +13,9 @@
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- Disable foreign key checks for clean import
+SET FOREIGN_KEY_CHECKS=0;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
@@ -167,6 +170,153 @@ UNLOCK TABLES;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+--
+-- Drop tables with foreign key constraints first
+--
+
+DROP TABLE IF EXISTS `payment_history`;
+DROP TABLE IF EXISTS `company_activity_logs`;
+
+--
+-- Table structure for table `companies`
+--
+
+DROP TABLE IF EXISTS `companies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `companies` (
+  `id` char(36) NOT NULL COMMENT 'UUID của công ty',
+  `organization_name` varchar(255) NOT NULL COMMENT 'Tên tổ chức hoặc đại diện',
+  `email` varchar(255) NOT NULL COMMENT 'Email đăng nhập',
+  `password_hash` varchar(255) NOT NULL COMMENT 'Mật khẩu đã hash',
+  `payment_completed` tinyint(1) DEFAULT '0' COMMENT 'Đã hoàn tất thanh toán',
+  `payment_date` datetime DEFAULT NULL COMMENT 'Ngày thanh toán',
+  `payment_amount` int DEFAULT '2000000' COMMENT 'Số tiền thanh toán (VNĐ)',
+  `terms_agreed` tinyint(1) DEFAULT '0' COMMENT 'Đã đồng ý điều khoản',
+  `terms_agreed_date` datetime DEFAULT NULL COMMENT 'Ngày đồng ý điều khoản',
+  `is_active` tinyint(1) DEFAULT '1' COMMENT 'Tài khoản hoạt động',
+  `is_verified` tinyint(1) DEFAULT '0' COMMENT 'Đã xác thực email',
+  `last_login` datetime DEFAULT NULL COMMENT 'Lần đăng nhập cuối',
+  `login_count` int DEFAULT '0' COMMENT 'Số lần đăng nhập',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Ngày tạo',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Ngày cập nhật',
+  `notes` text COMMENT 'Ghi chú thêm',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `idx_company_email` (`email`),
+  KEY `idx_company_payment` (`payment_completed`),
+  KEY `idx_company_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `companies`
+--
+
+LOCK TABLES `companies` WRITE;
+/*!40000 ALTER TABLE `companies` DISABLE KEYS */;
+-- Sample company data
+INSERT INTO `companies` VALUES 
+('550e8400-e29b-41d4-a716-446655440001','Công ty TNHH Xanh','green.company@example.com','$2b$12$qKPABGAz5iFkfcVECWsmXOUTnkBMokc/MnxO8d/Vp66S1NYiIaEzm',1,'2024-01-15 10:30:00',2000000,1,'2024-01-15 10:25:00',1,1,'2024-01-20 14:22:33',5,'2024-01-15 09:15:30','2024-01-20 14:22:33','Công ty tiên phong trong lĩnh vực carbon credit'),
+('550e8400-e29b-41d4-a716-446655440002','Tập đoàn Môi trường ABC','env.abc@company.vn','$2b$12$qKPABGAz5iFkfcVECWsmXOUTnkBMokc/MnxO8d/Vp66S1NYiIaEzm',0,NULL,2000000,0,NULL,1,0,NULL,1,0,NULL,0,'2024-01-18 16:45:22','2024-01-18 16:45:22','Tập đoàn đa quốc gia quan tâm đến môi trường');
+/*!40000 ALTER TABLE `companies` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `company_activity_logs`
+--
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `company_activity_logs` (
+  `id` char(36) NOT NULL COMMENT 'UUID của log',
+  `company_id` char(36) NOT NULL COMMENT 'ID công ty',
+  `action` varchar(100) NOT NULL COMMENT 'Hành động thực hiện',
+  `description` text COMMENT 'Mô tả chi tiết',
+  `status` varchar(20) DEFAULT 'completed' COMMENT 'Trạng thái: completed, pending, failed',
+  `ip_address` varchar(45) DEFAULT NULL COMMENT 'Địa chỉ IP',
+  `user_agent` text COMMENT 'User agent',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Thời gian thực hiện',
+  PRIMARY KEY (`id`),
+  KEY `idx_company_activity_company_id` (`company_id`),
+  KEY `idx_company_activity_action` (`action`),
+  KEY `idx_company_activity_status` (`status`),
+  KEY `idx_company_activity_created` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `company_activity_logs`
+--
+
+LOCK TABLES `company_activity_logs` WRITE;
+/*!40000 ALTER TABLE `company_activity_logs` DISABLE KEYS */;
+-- Sample activity logs
+INSERT INTO `company_activity_logs` VALUES 
+('660e8400-e29b-41d4-a716-446655440001','550e8400-e29b-41d4-a716-446655440001','Đăng ký tài khoản','Hoàn tất đăng ký và tạo tài khoản mới','completed','192.168.1.100','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36','2024-01-15 09:15:30'),
+('660e8400-e29b-41d4-a716-446655440002','550e8400-e29b-41d4-a716-446655440001','Hoàn tất thanh toán','Thanh toán phí đăng ký 2,000,000 VNĐ và đồng ý điều khoản','completed','192.168.1.100','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36','2024-01-15 10:30:00'),
+('660e8400-e29b-41d4-a716-446655440003','550e8400-e29b-41d4-a716-446655440001','Đăng nhập','Đăng nhập vào hệ thống','completed','192.168.1.100','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36','2024-01-16 08:22:15'),
+('660e8400-e29b-41d4-a716-446655440004','550e8400-e29b-41d4-a716-446655440001','Xem báo cáo thị trường','Truy cập báo cáo phân tích thị trường carbon credit Q1/2024','completed','192.168.1.100','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36','2024-01-18 14:35:22'),
+('660e8400-e29b-41d4-a716-446655440005','550e8400-e29b-41d4-a716-446655440002','Đăng ký tài khoản','Hoàn tất đăng ký và tạo tài khoản mới','completed','192.168.1.150','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36','2024-01-18 16:45:22');
+/*!40000 ALTER TABLE `company_activity_logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_history`
+--
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment_history` (
+  `id` char(36) NOT NULL COMMENT 'ID thanh toán',
+  `company_id` char(36) NOT NULL COMMENT 'ID công ty',
+  `amount` decimal(15,2) NOT NULL COMMENT 'Số tiền thanh toán',
+  `currency` varchar(10) DEFAULT 'VND' COMMENT 'Đơn vị tiền tệ',
+  `payment_method` varchar(50) DEFAULT NULL COMMENT 'Phương thức thanh toán',
+  `transaction_id` varchar(255) DEFAULT NULL COMMENT 'Mã giao dịch',
+  `period_start` datetime NOT NULL COMMENT 'Ngày bắt đầu gói dịch vụ',
+  `period_end` datetime NOT NULL COMMENT 'Ngày kết thúc gói dịch vụ',
+  `period_name` varchar(100) NOT NULL COMMENT 'Tên gói dịch vụ',
+  `payment_type` varchar(20) DEFAULT 'monthly' COMMENT 'Loại thanh toán: monthly, free, bonus',
+  `status` varchar(20) DEFAULT 'pending' COMMENT 'Trạng thái: pending, completed, failed, active',
+  `is_bonus` tinyint(1) DEFAULT 0 COMMENT 'Có phải tháng miễn phí bonus không',
+  `consecutive_count` int DEFAULT 0 COMMENT 'Số lần thanh toán liên tiếp',
+  `payment_date` datetime DEFAULT NULL COMMENT 'Ngày thanh toán thực tế',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Ngày tạo',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Ngày cập nhật',
+  PRIMARY KEY (`id`),
+  KEY `idx_company_id` (`company_id`),
+  KEY `idx_payment_type` (`payment_type`),
+  KEY `idx_status` (`status`),
+  KEY `idx_period_end` (`period_end`),
+  CONSTRAINT `fk_payment_history_company` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Lịch sử thanh toán công ty';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_history`
+--
+
+LOCK TABLES `payment_history` WRITE;
+/*!40000 ALTER TABLE `payment_history` DISABLE KEYS */;
+INSERT INTO `payment_history` VALUES
+-- Company 1 payments (current active subscription with bonus)
+('770e8400-e29b-41d4-a716-446655440001','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240115140022_550e8400','2024-01-15 14:00:22','2024-02-15 14:00:22','Tháng 1/2024','monthly','completed',0,1,'2024-01-15 14:00:22','2024-01-15 14:00:22','2024-01-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440002','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240215140022_550e8400','2024-02-15 14:00:22','2024-03-15 14:00:22','Tháng 2/2024','monthly','completed',0,2,'2024-02-15 14:00:22','2024-02-15 14:00:22','2024-02-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440003','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240315140022_550e8400','2024-03-15 14:00:22','2024-04-15 14:00:22','Tháng 3/2024','monthly','completed',0,3,'2024-03-15 14:00:22','2024-03-15 14:00:22','2024-03-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440004','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240415140022_550e8400','2024-04-15 14:00:22','2024-05-15 14:00:22','Tháng 4/2024','monthly','completed',0,4,'2024-04-15 14:00:22','2024-04-15 14:00:22','2024-04-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440005','550e8400-e29b-41d4-a716-446655440001',0.00,'VND','bonus','TXN_20240515140022_550e8400','2024-05-15 14:00:22','2024-06-15 14:00:22','Tháng 5/2024 (FREE BONUS)','bonus','completed',1,5,'2024-05-15 14:00:22','2024-05-15 14:00:22','2024-05-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440007','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240615140022_550e8400','2024-06-15 14:00:22','2024-07-15 14:00:22','Tháng 6/2024','monthly','completed',0,6,'2024-06-15 14:00:22','2024-06-15 14:00:22','2024-06-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440008','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240715140022_550e8400','2024-07-15 14:00:22','2024-08-15 14:00:22','Tháng 7/2024','monthly','completed',0,7,'2024-07-15 14:00:22','2024-07-15 14:00:22','2024-07-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440009','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240815140022_550e8400','2024-08-15 14:00:22','2024-09-15 14:00:22','Tháng 8/2024','monthly','completed',0,8,'2024-08-15 14:00:22','2024-08-15 14:00:22','2024-08-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440010','550e8400-e29b-41d4-a716-446655440001',500000.00,'VND','bank_transfer','TXN_20240915140022_550e8400','2024-09-15 14:00:22','2024-10-15 14:00:22','Tháng 9/2024','monthly','completed',0,9,'2024-09-15 14:00:22','2024-09-15 14:00:22','2024-09-15 14:00:22'),
+('770e8400-e29b-41d4-a716-446655440011','550e8400-e29b-41d4-a716-446655440001',0.00,'VND','bonus','TXN_20241015140022_550e8400','2024-10-15 14:00:22','2024-11-15 14:00:22','Tháng 10/2024 (FREE BONUS)','bonus','active',1,10,'2024-10-15 14:00:22','2024-10-15 14:00:22','2024-10-15 14:00:22'),
+-- Company 2 payments
+('770e8400-e29b-41d4-a716-446655440012','550e8400-e29b-41d4-a716-446655440002',500000.00,'VND','bank_transfer','TXN_20240118164522_550e8400','2024-01-18 16:45:22','2024-02-18 16:45:22','Tháng 1/2024','monthly','completed',0,1,'2024-01-18 16:45:22','2024-01-18 16:45:22','2024-01-18 16:45:22');
+/*!40000 ALTER TABLE `payment_history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS=1;
+
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

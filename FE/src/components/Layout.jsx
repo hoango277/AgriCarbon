@@ -28,8 +28,15 @@ const Layout = ({ children, user }) => {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
+        if (user?.role === 'company') {
+            localStorage.removeItem('company_token');
+            localStorage.removeItem('company_data');
+            localStorage.removeItem('company_payment_completed');
+            navigate('/company-login');
+        } else {
+            localStorage.removeItem('token');
+            navigate('/login');
+        }
     };
 
     const toggleSidebar = () => {
@@ -104,6 +111,36 @@ const Layout = ({ children, user }) => {
                     ),
                     label: 'Thông tin cá nhân',
                     path: '/profile'
+                }
+            ];
+        } else if (user?.role === 'company') {
+            return [
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    ),
+                    label: 'Trang chủ',
+                    path: '/company-dashboard'
+                },
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    ),
+                    label: 'Lịch sử',
+                    path: '/company-history'
+                },
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    ),
+                    label: 'Thông tin tài khoản',
+                    path: '/company-profile'
                 }
             ];
         } else {

@@ -244,6 +244,13 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
+                
+                {/* Back to Home */}
+                <div className="text-center mt-6">
+                    <Link to="/" className="text-gray-400 hover:text-black text-sm transition-colors">
+                        ← Quay về trang chủ
+                    </Link>
+                </div>
             </div>
         </div>
     );
