@@ -55,4 +55,39 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     user = db.query(User).filter(User.cccd == cccd).first()
     if user is None:
         raise credentials_exception
-    return user 
+    return user
+
+async def get_current_user_or_company(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """
+    Get current user or company based on token.
+    Returns either User or Company object depending on token type.
+    """
+    from models.user import User
+    from models.company import Company
+    
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        identifier = payload.get("sub")
+        if identifier is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    
+    # Try to find user first (by cccd)
+    user = db.query(User).filter(User.cccd == identifier).first()
+    if user:
+        return user
+    
+    # If not found, try to find company (by id)
+    company = db.query(Company).filter(Company.id == identifier).first()
+    if company:
+        return company
+    
+    # If neither found, raise exception
+    raise credentials_exception 

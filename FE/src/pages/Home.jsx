@@ -135,17 +135,17 @@ const Home = () => {
 
                             {/* Login Buttons */}
                             <div className="flex space-x-2">
-                                <Link
+                                {/* <Link
                                     to="/login"
                                     className="bg-white bg-opacity-20 hover:bg-opacity-30 text-black px-4 py-2 rounded-full border border-white border-opacity-30 transition-all duration-200 backdrop-blur-sm text-sm"
                                 >
                                     Nông dân
-                                </Link>
+                                </Link> */}
                                 <Link
                                     to="/company-login"
                                     className="bg-purple-500 bg-opacity-80 hover:bg-opacity-90 text-white px-4 py-2 rounded-full border border-purple-400 border-opacity-50 transition-all duration-200 backdrop-blur-sm text-sm"
                                 >
-                                    Công ty
+                                    Đăng nhập
                                 </Link>
                             </div>
                         </div>
@@ -176,7 +176,7 @@ const Home = () => {
                         {/* Call to Action */}
                         <div className="mt-12 space-y-6">
                             <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center">
-                                <Link
+                                {/* <Link
                                     to="/register"
                                     className="bg-gradient-to-r from-green-600 to-blue-700 hover:from-green-700 hover:to-blue-800 text-white px-6 py-3 rounded-full text-lg font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 inline-flex items-center space-x-3 w-full md:w-auto justify-center"
                                 >
@@ -184,7 +184,7 @@ const Home = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                     <span>Đăng ký với tư cách nông dân</span>
-                                </Link>
+                                </Link> */}
                                 <Link
                                     to="/company-register"
                                     className="bg-gradient-to-r from-purple-600 to-pink-700 hover:from-purple-700 hover:to-pink-800 text-white px-6 py-3 rounded-full text-lg font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 inline-flex items-center space-x-3 w-full md:w-auto justify-center"
@@ -192,12 +192,12 @@ const Home = () => {
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                     </svg>
-                                    <span>Đăng ký với tư cách công ty</span>
+                                    <span>Bắt đầu ngay</span>
                                 </Link>
                             </div>
-                            <p className="text-gray-200 text-sm text-center max-w-2xl mx-auto opacity-80">
+                            {/* <p className="text-gray-200 text-sm text-center max-w-2xl mx-auto opacity-80">
                                 Chọn hình thức đăng ký phù hợp với bạn để bắt đầu hành trình carbon credit
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                 </div>
@@ -392,12 +392,12 @@ const Home = () => {
                                             <h3 className="text-xl font-semibold text-slate-800 mb-3 group-hover:text-slate-700 transition-colors duration-300" style={{
                                                 textShadow: '1px 1px 2px rgba(255,255,255,0.3)'
                                             }}>
-                                                Dễ dàng mở rộng dự án tại thị trường Việt Nam
+                                                Kết nối với chủ rừng, doanh nghiệp nhanh chóng
                                             </h3>
                                             <p className="text-slate-700 leading-relaxed" style={{
                                                 textShadow: '0.5px 0.5px 1px rgba(255,255,255,0.2)'
                                             }}>
-                                                Hiểu rõ đặc thù địa phương, hỗ trợ phát triển bền vững trong thị trường nội địa
+                                                Tạo cầu nối tức thời giữa chủ rừng và doanh nghiệp, giúp hợp tác và triển khai dự án thuận lợi.
                                             </p>
                                         </div>
                                     </div>

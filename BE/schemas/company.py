@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime
 
 class CompanyRegisterRequest(BaseModel):
-    organization_name: str = Field(..., min_length=2, max_length=255, description="Tên tổ chức hoặc đại diện")
+    organization_name: str = Field(..., min_length=1, max_length=255, description="Tên tổ chức hoặc đại diện")
     email: EmailStr = Field(..., description="Email đăng nhập")
     password: str = Field(..., min_length=6, max_length=100, description="Mật khẩu")
 

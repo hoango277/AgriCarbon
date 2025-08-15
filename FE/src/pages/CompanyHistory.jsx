@@ -364,13 +364,13 @@ const CompanyHistory = () => {
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-sm font-medium text-gray-700">Tiến độ</span>
                                     <span className="text-sm font-medium text-purple-600">
-                                        {paymentStats.consecutive_payments % 5}/5
+                                        {paymentStats.consecutive_payments}/5
                                     </span>
                                 </div>
                                 <div className="w-full bg-gray-200 rounded-full h-3">
                                     <div 
                                         className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all duration-500"
-                                        style={{ width: `${((paymentStats.consecutive_payments % 5) / 5) * 100}%` }}
+                                        style={{ width: `${(paymentStats.consecutive_payments / 5) * 100}%` }}
                                     ></div>
                                 </div>
                             </div>

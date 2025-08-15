@@ -77,6 +77,8 @@ const Layout = ({ children, user }) => {
                 return 'Admin Dashboard';
             case '/admin/carbon-tracking':
                 return 'Theo dõi Carbon Nông dân';
+            case '/potential-map':
+                return 'Bản đồ tiềm năng';
             default:
                 return 'Dashboard';
         }
@@ -102,6 +104,15 @@ const Layout = ({ children, user }) => {
                     ),
                     label: 'Theo dõi Carbon Nông dân',
                     path: '/admin/carbon-tracking'
+                },
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                        </svg>
+                    ),
+                    label: 'Bản đồ tiềm năng',
+                    path: '/potential-map'
                 },
                 {
                     icon: (
@@ -132,6 +143,15 @@ const Layout = ({ children, user }) => {
                     ),
                     label: 'Lịch sử',
                     path: '/company-history'
+                },
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                        </svg>
+                    ),
+                    label: 'Bản đồ tiềm năng',
+                    path: '/potential-map'
                 },
                 {
                     icon: (
@@ -180,6 +200,15 @@ const Layout = ({ children, user }) => {
                     ),
                     label: 'Theo dõi Carbon',
                     path: '/carbon-tracking'
+                },
+                {
+                    icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                        </svg>
+                    ),
+                    label: 'Bản đồ tiềm năng',
+                    path: '/potential-map'
                 },
                 {
                     icon: (

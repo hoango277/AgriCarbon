@@ -350,7 +350,18 @@ async def get_payment_history(
         
         # Calculate statistics
         completed_payments = [p for p in all_payments if p.status == 'completed' and p.payment_type == 'monthly']
-        consecutive_payments = len(completed_payments)
+        
+        # Find the last bonus payment to calculate consecutive payments since last bonus
+        bonus_payments = [p for p in all_payments if p.status == 'completed' and p.is_bonus == True]
+        if bonus_payments:
+            # Get the latest bonus payment
+            latest_bonus = max(bonus_payments, key=lambda x: x.created_at)
+            # Count monthly payments after the latest bonus
+            consecutive_payments = len([p for p in completed_payments if p.created_at > latest_bonus.created_at])
+        else:
+            # No bonus received yet, count all monthly payments
+            consecutive_payments = len(completed_payments)
+        
         next_bonus_in = 5 - (consecutive_payments % 5) if consecutive_payments % 5 != 0 else 0
         
         # Find current active subscription
@@ -482,13 +493,25 @@ async def extend_subscription(
             period_end = period_start.replace(year=new_year, month=new_month)
         
         # Calculate consecutive payments for bonus tracking
-        completed_payments = db.query(PaymentHistory).filter(
+        all_company_payments = db.query(PaymentHistory).filter(
             PaymentHistory.company_id == current_company.id,
-            PaymentHistory.status == 'completed',
-            PaymentHistory.payment_type == 'monthly'
-        ).count()
+            PaymentHistory.status == 'completed'
+        ).all()
         
-        consecutive_count = completed_payments + 1
+        completed_monthly_payments = [p for p in all_company_payments if p.payment_type == 'monthly']
+        
+        # Find the last bonus payment to calculate consecutive payments since last bonus
+        bonus_payments = [p for p in all_company_payments if p.is_bonus == True]
+        if bonus_payments:
+            # Get the latest bonus payment
+            latest_bonus = max(bonus_payments, key=lambda x: x.created_at)
+            # Count monthly payments after the latest bonus
+            consecutive_since_bonus = len([p for p in completed_monthly_payments if p.created_at > latest_bonus.created_at])
+        else:
+            # No bonus received yet, count all monthly payments
+            consecutive_since_bonus = len(completed_monthly_payments)
+        
+        consecutive_count = consecutive_since_bonus + 1
         is_bonus = consecutive_count % 5 == 0  # Every 5th payment is bonus
         
         # Calculate amount (0 if bonus month)

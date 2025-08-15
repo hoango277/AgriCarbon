@@ -1,4 +1,5 @@
 # Schemas package
+from .region import RegionCreate, RegionUpdate, RegionResponse, RegionListResponse
 from .user import *
 from .crop import *
 from .carbon import *

@@ -16,6 +16,7 @@ import CompanyPayment from './pages/CompanyPayment'
 import CompanyDashboard from './pages/CompanyDashboard'
 import CompanyProfile from './pages/CompanyProfile'
 import CompanyHistory from './pages/CompanyHistory'
+import PotentialMap from './pages/PotentialMap'
 
 function Router() {
   return (
@@ -37,6 +38,7 @@ function Router() {
       <Route path="/company-dashboard" element={<CompanyDashboard />} />
       <Route path="/company-profile" element={<CompanyProfile />} />
       <Route path="/company-history" element={<CompanyHistory />} />
+      <Route path="/potential-map" element={<PotentialMap />} />
     </Routes>
   )
 }
