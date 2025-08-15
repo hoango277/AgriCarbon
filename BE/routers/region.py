@@ -9,7 +9,7 @@ from schemas.region import RegionCreate, RegionUpdate, RegionResponse, RegionLis
 
 router = APIRouter(prefix="/regions", tags=["regions"])
 
-@router.get("/", response_model=RegionListResponse)
+@router.get("", response_model=RegionListResponse)
 async def get_regions(
     page: int = Query(1, ge=1, description="Số trang"),
     limit: int = Query(100, ge=1, le=1000, description="Số lượng per page"),
