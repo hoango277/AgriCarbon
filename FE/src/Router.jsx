@@ -17,6 +17,7 @@ import CompanyDashboard from './pages/CompanyDashboard'
 import CompanyProfile from './pages/CompanyProfile'
 import CompanyHistory from './pages/CompanyHistory'
 import PotentialMapPage from './pages/PotentialMapPage'
+import PromotionRegister from './pages/PromotionRegister'
 
 function Router() {
   return (
@@ -39,6 +40,7 @@ function Router() {
       <Route path="/company-profile" element={<CompanyProfile />} />
       <Route path="/company-history" element={<CompanyHistory />} />
       <Route path="/potential-map" element={<PotentialMapPage />} />
+      <Route path="/promotion-register" element={<PromotionRegister />} />
     </Routes>
   )
 }

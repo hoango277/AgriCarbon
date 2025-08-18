@@ -4,10 +4,10 @@ import logging
 from configs.database import engine, Base
 from configs.database_utils import init_database
 from configs.settings import settings
-from routers import auth, crop, carbon, company, region
+from routers import auth, crop, carbon, company, region, promotion_register
 
 # Import models để register với Base.metadata
-from models import user, crop_declaration, commitment, carbon_tracking, company as company_models, region as region_model
+from models import user, crop_declaration, commitment, carbon_tracking, company as company_models, region as region_model, promotion_register as promotion_model
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +37,7 @@ app.include_router(crop.router, prefix="/api/crop", tags=["Crop Management"])
 app.include_router(carbon.router, prefix="/api", tags=["Carbon Tracking"])
 app.include_router(company.router, tags=["Company Management"])
 app.include_router(region.router, prefix="/api", tags=["Region Management"])
+app.include_router(promotion_register.router, prefix="/api", tags=["Promotion Register"])
 
 @app.get("/")
 def root():

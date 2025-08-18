@@ -3,6 +3,7 @@ from .region import RegionCreate, RegionUpdate, RegionResponse, RegionListRespon
 from .user import *
 from .crop import *
 from .carbon import *
+from .promotion_register import *
 
 __all__ = [
     # User schemas
@@ -17,5 +18,9 @@ __all__ = [
     
     # Carbon schemas
     "CarbonTrackingBase", "CarbonTrackingCreate", "CarbonTrackingUpdate",
-    "CarbonTrackingResponse", "WeeklyCarbonData", "CarbonSummary"
+    "CarbonTrackingResponse", "WeeklyCarbonData", "CarbonSummary",
+    
+    # Promotion register schemas
+    "PromotionRegisterBase", "PromotionRegisterCreate", "PromotionRegisterUpdate",
+    "PromotionRegisterResponse", "PromotionRegisterListResponse"
 ] 

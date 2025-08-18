@@ -110,4 +110,25 @@ export const carbonAPI = {
   getAdminFarmerAreas: (farmerId) => apiService.get(`/carbon/admin/farmers/${farmerId}/areas`),
 };
 
+// Promotion Register API
+export const promotionAPI = {
+  // Tạo đăng ký ưu đãi đặc biệt mới
+  createRegistration: (registrationData) => apiService.post('/promotion-register', registrationData),
+  
+  // Lấy danh sách tất cả đăng ký ưu đãi (admin only)
+  getAllRegistrations: (params = {}) => apiService.get('/promotion-register', { params }),
+  
+  // Lấy chi tiết một đăng ký ưu đãi
+  getRegistration: (id) => apiService.get(`/promotion-register/${id}`),
+  
+  // Cập nhật đăng ký ưu đãi
+  updateRegistration: (id, data) => apiService.put(`/promotion-register/${id}`, data),
+  
+  // Xóa đăng ký ưu đãi
+  deleteRegistration: (id) => apiService.delete(`/promotion-register/${id}`),
+  
+  // Lấy thống kê đăng ký ưu đãi
+  getStatistics: () => apiService.get('/promotion-register/statistics'),
+};
+
 export default apiService; 
