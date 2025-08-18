@@ -175,7 +175,7 @@ const PromotionRegister = () => {
             items: [
                 {
                     title: "Ưu đãi dành cho khách hàng mới",
-                    content: "Chương trình ưu đãi đặc biệt dành cho khách hàng đăng ký lần đầu với mức giảm giá lên đến 30% cho gói giám sát 12 tháng và 50% cho gói 24 tháng."
+                    content: "Chương trình ưu đãi đặc biệt dành cho khách hàng đăng ký lần đầu với mức giảm giá lên đến 5% cho gói giám sát 12 tháng và 13% cho gói 24 tháng."
                 },
                 {
                     title: "Điều kiện áp dụng ưu đãi",
@@ -346,16 +346,16 @@ const PromotionRegister = () => {
                 <div className="text-center mb-8">
                     <div className="bg-gradient-to-r from-emerald-600 to-green-600 text-white py-6 px-8 rounded-xl shadow-lg">
                         <h1 className="text-3xl font-bold mb-2">Chương trình ưu đãi đặc biệt</h1>
-                        <p className="text-emerald-100 text-lg">Giảm giá lên đến 50% cho gói giám sát Carbon</p>
+                        <p className="text-emerald-100 text-lg">Giảm giá lên đến 13% cho gói giám sát Carbon</p>
                         <div className="mt-4 flex justify-center space-x-6 text-sm">
                             <div className="bg-white/20 px-4 py-2 rounded-lg">
                                 <span className="font-semibold">Gói 6 tháng:</span> Giá chuẩn
                             </div>
                             <div className="bg-white/20 px-4 py-2 rounded-lg">
-                                <span className="font-semibold">Gói 12 tháng:</span> Giảm 30%
+                                <span className="font-semibold">Gói 12 tháng:</span> Giảm 5%
                             </div>
                             <div className="bg-white/20 px-4 py-2 rounded-lg">
-                                <span className="font-semibold">Gói 24 tháng:</span> Giảm 50%
+                                <span className="font-semibold">Gói 24 tháng:</span> Giảm 13%
                             </div>
                         </div>
                     </div>
@@ -513,7 +513,7 @@ const PromotionRegister = () => {
                                                 <option value="">Chọn gói giám sát</option>
                                                 {monitoringPackages.map((pkg) => (
                                                     <option key={pkg.value} value={pkg.value}>
-                                                        {pkg.label} {pkg.value === '12' ? '(Giảm 30%)' : pkg.value === '24' ? '(Giảm 50%)' : ''}
+                                                        {pkg.label} {pkg.value === '12' ? '(Giảm 5%)' : pkg.value === '24' ? '(Giảm 13%)' : ''}
                                                     </option>
                                                 ))}
                                             </select>
@@ -640,8 +640,8 @@ const PromotionRegister = () => {
                                                         <div className="flex justify-between items-center mt-2">
                                                             <span className="text-sm font-medium">Ưu đãi:</span>
                                                             <span className="text-red-500 font-semibold">
-                                                                {formData.monitoringPackage === '12' ? '-30%' : 
-                                                                 formData.monitoringPackage === '24' ? '-50%' : 'Giá chuẩn'}
+                                                                {formData.monitoringPackage === '12' ? '-5%' : 
+                                                                 formData.monitoringPackage === '24' ? '-13%' : 'Giá chuẩn'}
                                                             </span>
                                                         </div>
                                                     </div>
